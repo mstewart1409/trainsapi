@@ -1,10 +1,8 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { fetchWeather } from "@/lib/weather";
 
 const WeatherPage = () => {
     const [weather, setWeather] = useState(null);
-    const [city, setCity] = useState('Duesseldorf');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -14,7 +12,8 @@ const WeatherPage = () => {
             setError(null);
 
             try {
-                const data = await fetchWeather(city);
+                const response = await fetch('/api/weather');
+                const data = await response.json();
                 setWeather(data);
             } catch (err) {
                 setError("Error fetching weather data.");
@@ -24,11 +23,7 @@ const WeatherPage = () => {
         };
 
         getWeather();
-    }, [city]);
-
-    const handleCityChange = (e) => {
-        setCity(e.target.value); // Update the city state when user types
-    };
+    }, []);
 
     const roundedTemperature = weather ? Math.round(weather.main.temp) : null;
 
@@ -45,7 +40,7 @@ const WeatherPage = () => {
                         <img
                             src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
                             alt={weather.weather[0].description}
-                            style={{ width: '100px', height: '100px' }}
+                            style={{ width: '150px', height: '150px' }}
                         />
                     </div>
                     <p><strong>{weather.name}, {weather.sys.country}</strong></p>

@@ -28,7 +28,7 @@ export default function TrainsPage() {
         linie: "",  // Filtering by train number (Linie)
         richtung: "", // Filtering by direction (Richtung)
         limit: 5,
-        location: "WUPPERSTRASSE" // Default location
+        location: Object.keys(options)[1] // Default location
     });
     // Create a ref to persist the infos without resetting
     const infoRefs = useRef([]);
