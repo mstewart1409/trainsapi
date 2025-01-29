@@ -5,15 +5,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const apiKey = process.env.OWM_API_KEY;
-const city = process.env.CITY;
 
-function getUrl(city) {
-    return `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+function getUrl(lat, lon) {
+    return `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 }
 
-export async function fetchWeather() {
+export async function fetchWeather(lat, lon) {
     try {
-        const response = await fetch(getUrl(city));
+        const response = await fetch(getUrl(lat, lon));
 
         if (!response.ok) {
             return { error: `HTTP error! Status: ${response.status}` };

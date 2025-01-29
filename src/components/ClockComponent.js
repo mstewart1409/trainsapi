@@ -1,7 +1,7 @@
 // src/components/ClockComponent.js
 import { useEffect, useState } from "react";
 
-export function useClock(showSeconds = true) { // Parameter to toggle seconds
+export default function useClock(showSeconds = true) { // Parameter to toggle seconds
     const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {

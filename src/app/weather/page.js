@@ -1,34 +1,39 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { useClock } from '@/components/ClockComponent';
+import useClock from '@/components/ClockComponent';
+import useLocation from '@/components/LocationComponent';
+
 
 const WeatherPage = () => {
     const [weather, setWeather] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const position = useLocation();
 
     useEffect(() => {
-        const getWeather = async () => {
-            setLoading(true);
-            setError(null);
+        if (position !== null) {  // Check if position is available
+            const getWeather = async () => {
+                setLoading(true);
+                setError(null);
 
-            try {
-                const response = await fetch('/api/weather');
-                const data = await response.json();
-                setWeather(data);
-            } catch (err) {
-                setError("Error fetching weather data.");
-            } finally {
-                setLoading(false);
-            }
-        };
+                try {
+                    const response = await fetch(`/api/weather?lat=${position.latitude}&long=${position.longitude}`);
+                    const data = await response.json();
+                    setWeather(data);
+                } catch (err) {
+                    setError("Error fetching weather data.");
+                } finally {
+                    setLoading(false);
+                }
+            };
 
-        getWeather(); // Fetch immediately on mount
+            getWeather(); // Fetch immediately when position is available
 
-        const interval = setInterval(getWeather, 60000); // Refresh every 60 seconds
+            const interval = setInterval(getWeather, 60000); // Refresh weather every 60 seconds
 
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, []);
+            return () => clearInterval(interval); // Cleanup on unmount
+        }
+    }, [position]); // Re-run whenever position changes
 
     const roundedTemperature = weather ? Math.round(weather.main.temp) : null;
 
