@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { options } from '@/lib/vrr';
-import { useClock } from '@/components/ClockComponent';
+import useClock from '@/components/ClockComponent';
 import Link from "next/link";
 
 const calculateRemainingMinutes = (departureTime) => {
