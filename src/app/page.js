@@ -148,57 +148,64 @@ export default function Home() {
             <h1 className="text-2xl font-bold mb-4">Train Departures</h1>
             {error && <p className="text-red-500">{error}</p>}
 
-            <div className="mb-4">
+            <div className="mb-4 flex-wrap">
                 {/* Location dropdown */}
-                <label className="mr-2">Select Location: </label>
-                <select
-                    value={filters.location}
-                    onChange={(e) => handleFilterChange('location', e.target.value)}
-                    className="border p-2 mb-2"
-                >
-                    {Object.entries(options).map(([key, { name }]) => (
-                        <option key={key} value={key}>
-                            {name}
-                        </option>
-                    ))}
-                </select>
+                <div><label className="mr-2">Select Location: </label>
+                    <select
+                        value={filters.location}
+                        onChange={(e) => handleFilterChange('location', e.target.value)}
+                        className="border p-2 mb-2"
+                    >
+                        {Object.entries(options).map(([key, { name }]) => (
+                            <option key={key} value={key}>
+                                {name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
                 {/* Filter by Gleis */}
-                <label className="mr-2">Filter by Gleis: </label>
-                <select
-                    value={filters.gleis}
-                    onChange={(e) => handleFilterChange('gleis', e.target.value)}
-                    className="border p-2 mb-2"
-                >
-                    {/* Populate the platform options dynamically based on the selected location */}
-                    <option value="">Select Gleis</option>
-                    {options[filters.location]?.platforms.map((platform, index) => (
-                        <option key={index} value={platform}>
-                            {platform}
-                        </option>
-                    ))}
-                </select>
+                <div>
+                    <label className="mr-2">Filter by Gleis: </label>
+                    <select
+                        value={filters.gleis}
+                        onChange={(e) => handleFilterChange('gleis', e.target.value)}
+                        className="border p-2 mb-2"
+                    >
+                        {/* Populate the platform options dynamically based on the selected location */}
+                        <option value="">Select Gleis</option>
+                        {options[filters.location]?.platforms.map((platform, index) => (
+                            <option key={index} value={platform}>
+                                {platform}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
 
                 {/* Filter by Linie */}
-                <label className="mr-2 ml-4">Filter by Linie: </label>
-                <input
-                    type="text"
-                    value={filters.linie}
-                    onChange={(e) => handleFilterChange('linie', e.target.value)}
-                    className="border p-2 mb-2"
-                    placeholder="Enter Train No (e.g., 101)"
-                />
+                <div>
+                    <label className="mr-2 ml-4">Filter by Linie: </label>
+                    <input
+                        type="text"
+                        value={filters.linie}
+                        onChange={(e) => handleFilterChange('linie', e.target.value)}
+                        className="border p-2 mb-2"
+                        placeholder="Enter Train No (e.g., 101)"
+                    />
+                </div>
 
                 {/* Filter by Richtung */}
-                <label className="mr-2 ml-4">Filter by Richtung: </label>
-                <input
-                    type="text"
-                    value={filters.richtung}
-                    onChange={(e) => handleFilterChange('richtung', e.target.value)}
-                    className="border p-2 mb-2"
-                    placeholder="Enter Destination (e.g., Berlin)"
-                />
+                <div>
+                    <label className="mr-2 ml-4">Filter by Richtung: </label>
+                    <input
+                        type="text"
+                        value={filters.richtung}
+                        onChange={(e) => handleFilterChange('richtung', e.target.value)}
+                        className="border p-2 mb-2"
+                        placeholder="Enter Destination (e.g., Berlin)"
+                    />
+                </div>
             </div>
 
             {/* Table of train stops */}
@@ -209,7 +216,7 @@ export default function Home() {
                     <th>Linie</th>
                     <th>Richtung</th>
                     <th>Gleis</th>
-                    <th>Arriving In</th>
+                    <th>Ankunft</th>
                 </tr>
                 </thead>
                 <tbody>
