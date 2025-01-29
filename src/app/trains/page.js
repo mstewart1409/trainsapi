@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { options } from '@/lib/vrr';
+import { useClock } from '@/components/ClockComponent';
 import Link from "next/link";
 
 const calculateRemainingMinutes = (departureTime) => {
@@ -12,7 +13,7 @@ const calculateRemainingMinutes = (departureTime) => {
 };
 
 export default function TrainsPage() {
-    const [currentTime, setCurrentTime] = useState(new Date());
+    const [loading, setLoading] = useState(true);
     const [trainStops, setTrainStops] = useState([]);
     const [filteredTrainStops, setFilteredTrainStops] = useState([]);
     const [error, setError] = useState(null);
@@ -20,7 +21,7 @@ export default function TrainsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStop, setSelectedStop] = useState(null);
     const router = useRouter();
-
+    const { formattedDate, formattedTime } = useClock();
     const [lastActivityTime, setLastActivityTime] = useState(Date.now());
 
     const [filters, setFilters] = useState({
@@ -36,15 +37,10 @@ export default function TrainsPage() {
     const [debouncedFilters, setDebouncedFilters] = useState(filters);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000); // Update time every second
-
-        return () => clearInterval(interval); // Cleanup the interval on component unmount
-    }, []);
-
-    useEffect(() => {
         async function fetchData() {
+            setLoading(true);
+            setError(null);
+
             try {
                 const response = await fetch(`/api/trainstops?key=${filters.location}`);
                 const data = await response.json();
@@ -56,6 +52,8 @@ export default function TrainsPage() {
                 }
             } catch (err) {
                 setError("Failed to fetch train stops");
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -97,6 +95,16 @@ export default function TrainsPage() {
         const resetInactivityTimeout = () => {
             setLastActivityTime(Date.now());  // Update the last activity timestamp
         };
+        // Function to handle inactivity timeout
+        const handleInactivity = () => {
+            const currentTime = Date.now();
+            const timeDifference = currentTime - lastActivityTime;
+
+            // If no activity for 5 minutes (300,000 ms), redirect to home
+            if (timeDifference >= 300000) {
+                router.push("/");  // Redirect to the homepage
+            }
+        };
 
         // Listeners for user activity
         const events = ['mousemove', 'keydown', 'click', 'scroll'];
@@ -116,20 +124,6 @@ export default function TrainsPage() {
             clearInterval(inactivityCheckInterval);
         };
     }, [lastActivityTime, router]);
-
-
-    const formattedDate = currentTime.toLocaleDateString("de-DE", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-
-    const formattedTime = currentTime.toLocaleTimeString("de-DE", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-    });
 
     // Generic filter function
     const applyFilters = (data, filters) => {
@@ -184,42 +178,15 @@ export default function TrainsPage() {
         return infoRefs.current[index]?.infos;
     };
 
-
-    const toggleLimit = () => {
-        if (buttonDisabled) return; // Prevent multiple clicks
-
-        setButtonDisabled(true); // Disable button immediately
-
-        setFilters(prevFilters => {
-            const newLimit = prevFilters.limit === 5 ? 10 : 5;
-
-            // Re-enable the button after state update is done
-            setTimeout(() => setButtonDisabled(false), 500); // Slight delay to avoid flickering
-
-            return { ...prevFilters, limit: newLimit };
-        });
-    };
-
-    // Function to handle inactivity timeout
-    const handleInactivity = () => {
-        const currentTime = Date.now();
-        const timeDifference = currentTime - lastActivityTime;
-
-        // If no activity for 5 minutes (300,000 ms), redirect to home
-        if (timeDifference >= 300000) {
-            router.push("/");  // Redirect to the homepage
-        }
-    };
-
     return (
         <main className="p-6 led-table-container">
             <div className="time-container">
                 <div className="date">{formattedDate}</div>
                 <div className="time">{formattedTime}</div>
             </div>
-
             <h1 className="text-2xl font-bold mb-4">Train Departures</h1>
             {error && <p className="text-red-500">{error}</p>}
+            {loading && <p>Loading...</p>}
 
             <div className="mb-4 flex-wrap">
                 {/* Location dropdown */}
@@ -339,7 +306,7 @@ export default function TrainsPage() {
             <div className="mb-4 flex-wrap">
                 {/* Show More / Show Less Button */}
                 <button
-                    onClick={toggleLimit}
+                    onClick={(e) => handleFilterChange('limit', filters.limit === 5 ? 10 : 5)}
                     disabled={buttonDisabled}
                     className={`mt-4 px-4 py-2 rounded ${buttonDisabled ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 text-white"}`}
                 >

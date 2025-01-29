@@ -96,7 +96,7 @@ p.text-red-500 {
 
 .scroll-text {
   display: inline-block;
-  animation: scrollText 10s linear infinite; /* Infinite scrolling with linear animation */
+  animation: scrollText 15s linear infinite; /* Infinite scrolling with linear animation */
 }
 
 /* Keyframe animation for scrolling text */
@@ -185,6 +185,7 @@ button {
   padding: 10px 20px;
   border: 2px solid #0f9d58;
   border-radius: 5px;
+  font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s, box-shadow 0.3s;
   text-transform: uppercase;

@@ -18,7 +18,7 @@ const fetchDataFromAPI = async () => {
 // Start a background worker that fetches data from the API every 2 minutes
 const startBackgroundWorker = () => {
     // Fetch data right away
-    fetchDataFromAPI();
+    //fetchDataFromAPI();
     setInterval(fetchDataFromAPI, 2 * 60 * 1000); // Every 2 minutes
 };
 
@@ -33,6 +33,7 @@ export async function GET() {
             return Response.json(cachedWeather, { status: 200 });
         } else {
             // If no cache data, fetch it from the API
+            console.log('No cache data for weather');
             await fetchDataFromAPI();
             const newWeatherData = cache.get('weather');
             return Response.json(newWeatherData, { status: 200 });

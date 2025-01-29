@@ -21,7 +21,7 @@ const fetchDataFromAPI = async (key) => {
 const startBackgroundWorker = () => {
     const keys = Object.keys(options);
     // Fetch data right away
-    keys.forEach(key => fetchDataFromAPI(key));
+    //keys.forEach(key => fetchDataFromAPI(key));
     setInterval(() => {
         keys.forEach(key => fetchDataFromAPI(key));
     }, 10 * 1000); // Every 10 seconds
@@ -41,6 +41,7 @@ export async function GET(request) {
             return Response.json(cachedVRR, { status: 200 });
         } else {
             // If no cache data, fetch it from the API
+            console.log('No cache data on VRR for key:', key);
             await fetchDataFromAPI(key);
             const newCachedVRR = cache.get('vrr_' + key);
             return Response.json(newCachedVRR, { status: 200 });
