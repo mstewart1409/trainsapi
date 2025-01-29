@@ -170,3 +170,31 @@ label {
   animation: scrollText 10s linear infinite;
 }
 
+/* Show More / Show Less Button */
+button {
+  background-color: #0f9d58; /* LED Green */
+  color: #111; /* Dark text for contrast */
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+  padding: 10px 20px;
+  border: 2px solid #0f9d58;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background-color: #13b76d; /* Slightly brighter green */
+  box-shadow: 0 0 10px #0f9d58, 0 0 20px #0f9d58;
+}
+
+/* Disabled Button */
+button:disabled {
+  background-color: #444; /* Darker grey to indicate disabled */
+  color: #666; /* Dimmed text */
+  border: 2px solid #555;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+

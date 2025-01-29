@@ -2,10 +2,18 @@
 import { useEffect, useState, useRef } from "react";
 import { options } from '@/lib/vrr';
 
+const calculateRemainingMinutes = (departureTime) => {
+    const now = new Date();
+    const departure = new Date(departureTime);
+    const difference = Math.floor((departure - now) / 60000); // Convert ms to minutes
+    return difference <= 0 ? "sofort" : `${difference} min`;
+};
+
 export default function Home() {
     const [trainStops, setTrainStops] = useState([]);
     const [filteredTrainStops, setFilteredTrainStops] = useState([]);
     const [error, setError] = useState(null);
+    const [buttonDisabled, setButtonDisabled] = useState(false);
     const [filters, setFilters] = useState({
         gleis: "",  // Filtering by platform (Gleis)
         linie: "",  // Filtering by train number (Linie)
@@ -15,6 +23,8 @@ export default function Home() {
     });
     // Create a ref to persist the infos without resetting
     const infoRefs = useRef([]);
+
+    const [debouncedFilters, setDebouncedFilters] = useState(filters);
 
     useEffect(() => {
         async function fetchData() {
@@ -33,10 +43,36 @@ export default function Home() {
         }
 
         fetchData();
-        const interval = setInterval(fetchData, 5000); // Refresh every 5 seconds
+        const interval = setInterval(fetchData, 10000); // Refresh every 5 seconds
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
     }, [filters]); // Re-fetch and apply filter whenever filters change
+
+    // Live timer effect for "Arriving In" field
+    useEffect(() => {
+        const updateTimers = () => {
+            setFilteredTrainStops((prevStops) =>
+                prevStops.map((stop) => ({
+                    ...stop,
+                    remainingTime: calculateRemainingMinutes(stop.estimated_time),
+                }))
+            );
+        };
+
+        updateTimers(); // Initial call
+        const interval = setInterval(updateTimers, 1000); // Update every second
+
+        return () => clearInterval(interval);
+    }, []);
+
+    // ** Debounced Filter Change Effect **
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            applyFilters(trainStops, debouncedFilters);
+        }, 300); // Wait 300ms before applying filters
+
+        return () => clearTimeout(timeout);
+    }, [debouncedFilters]); // Runs only when debouncedFilters change
 
     // Generic filter function
     const applyFilters = (data, filters) => {
@@ -73,11 +109,10 @@ export default function Home() {
 
     // Handle changes in filter inputs
     const handleFilterChange = (field, value) => {
-        setFilters(prevFilters => {
-            const updatedFilters = { ...prevFilters, [field]: value };
-            applyFilters(trainStops, updatedFilters); // Apply filters immediately on change
-            return updatedFilters;
-        });
+        setFilters((prevFilters) => ({ ...prevFilters, [field]: value }));
+
+        // Debounce the filter update to avoid flickering
+        setDebouncedFilters((prevFilters) => ({ ...prevFilters, [field]: value }));
     };
 
     // Compare and update infos only when it changes
@@ -90,6 +125,22 @@ export default function Home() {
         }
 
         return infoRefs.current[index]?.infos;
+    };
+
+
+    const toggleLimit = () => {
+        if (buttonDisabled) return; // Prevent multiple clicks
+
+        setButtonDisabled(true); // Disable button immediately
+
+        setFilters(prevFilters => {
+            const newLimit = prevFilters.limit === 5 ? 10 : 5;
+
+            // Re-enable the button after state update is done
+            setTimeout(() => setButtonDisabled(false), 500); // Slight delay to avoid flickering
+
+            return { ...prevFilters, limit: newLimit };
+        });
     };
 
     return (
@@ -190,13 +241,26 @@ export default function Home() {
                             </td>
                             <td>{stop.platform}</td>
                             <td className="arriving-in">
-                                {stop.cancelled ? <p className="text-red-500">Cancelled</p> : (stop.arriving_in === 0 ? "sofort" : stop.arriving_in + " min")}
+                                {stop.cancelled ? (
+                                    <p className="text-red-500">Cancelled</p>
+                                ) : (
+                                    stop.remainingTime
+                                )}
                             </td>
                         </tr>
                     );
                 })}
                 </tbody>
             </table>
+
+            {/* Show More / Show Less Button */}
+            <button
+                onClick={toggleLimit}
+                disabled={buttonDisabled}
+                className={`mt-4 px-4 py-2 rounded ${buttonDisabled ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 text-white"}`}
+            >
+                {filters.limit === 5 ? "Show More" : "Show Less"}
+            </button>
         </main>
     );
 }

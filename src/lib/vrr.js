@@ -39,14 +39,13 @@ export async function vrr(key) {
         const trainStops = data.stopEvents.map((stop) => ({
             arrival_time: stop?.departureTimePlanned,
             cancelled: stop?.isCancelled || false,
-            planned_time: stop?.departureTimePlanned,
+            estimated_time: stop?.departureTimeEstimated || stop?.departureTimePlanned,
             delay: (stop.departureTimeEstimated && stop.departureTimePlanned && stop.departureTimeEstimated !== stop.departureTimePlanned)
                 ? Math.floor((new Date(stop.departureTimeEstimated) - new Date(stop.departureTimePlanned)) / (1000 * 60))
                 : "-",
             platform: stop?.location?.properties?.platform || "Unknown",
             train_no: stop?.transportation?.number || "Unknown",
             destination: stop?.transportation?.destination?.name || "Unknown",
-            arriving_in: Math.max(0, Math.floor((new Date(stop.departureTimeEstimated) - new Date()) / (1000 * 60))),
             infos: stop?.infos?.map((info) => info.infoLinks[0]?.subtitle) || [],
         }));
 
