@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { options } from '@/lib/vrr';
 import Link from "next/link";
 
@@ -18,6 +19,9 @@ export default function TrainsPage() {
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStop, setSelectedStop] = useState(null);
+    const router = useRouter();
+
+    const [lastActivityTime, setLastActivityTime] = useState(Date.now());
 
     const [filters, setFilters] = useState({
         gleis: "",  // Filtering by platform (Gleis)
@@ -56,7 +60,7 @@ export default function TrainsPage() {
         }
 
         fetchData();
-        const interval = setInterval(fetchData, 10000); // Refresh every 5 seconds
+        const interval = setInterval(fetchData, 10000); // Refresh
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
     }, [filters]); // Re-fetch and apply filter whenever filters change
@@ -86,6 +90,33 @@ export default function TrainsPage() {
 
         return () => clearTimeout(timeout);
     }, [debouncedFilters, trainStops]); // Runs only when debouncedFilters change
+
+
+    // Reset the last activity time on mouse or key events
+    useEffect(() => {
+        const resetInactivityTimeout = () => {
+            setLastActivityTime(Date.now());  // Update the last activity timestamp
+        };
+
+        // Listeners for user activity
+        const events = ['mousemove', 'keydown', 'click', 'scroll'];
+
+        events.forEach((event) => {
+            window.addEventListener(event, resetInactivityTimeout);
+        });
+
+        // Set up the inactivity check interval
+        const inactivityCheckInterval = setInterval(handleInactivity, 1000); // Check every second
+
+        // Cleanup on component unmount
+        return () => {
+            events.forEach((event) => {
+                window.removeEventListener(event, resetInactivityTimeout);
+            });
+            clearInterval(inactivityCheckInterval);
+        };
+    }, [lastActivityTime, router]);
+
 
     const formattedDate = currentTime.toLocaleDateString("de-DE", {
         weekday: "long",
@@ -167,6 +198,17 @@ export default function TrainsPage() {
 
             return { ...prevFilters, limit: newLimit };
         });
+    };
+
+    // Function to handle inactivity timeout
+    const handleInactivity = () => {
+        const currentTime = Date.now();
+        const timeDifference = currentTime - lastActivityTime;
+
+        // If no activity for 5 minutes (300,000 ms), redirect to home
+        if (timeDifference >= 300000) {
+            router.push("/");  // Redirect to the homepage
+        }
     };
 
     return (
