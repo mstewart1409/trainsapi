@@ -19,6 +19,7 @@ export async function vrr() {
             train_no: stop?.transportation?.number || "Unknown",
             destination: stop?.transportation?.destination?.name || "Unknown",
             arriving_in: Math.max(0, Math.floor((new Date(stop.departureTimeEstimated) - new Date()) / (1000 * 60))),
+            infos: stop?.infos?.map((info) => info.infoLinks[0]?.subtitle) || [],
         }));
 
         return trainStops;

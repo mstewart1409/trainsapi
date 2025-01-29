@@ -7,6 +7,13 @@
   font-family: 'Courier New', monospace; /* Monospace font for that LED feel */
 }
 
+/* Control width of the Richtung column */
+.led-table th:nth-child(3), .led-table td:nth-child(3) {
+  max-width: 300px; /* Ensure it doesn't stretch too wide */
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .led-table th, .led-table td {
   padding: 15px;
   text-align: center;
@@ -57,3 +64,28 @@ input[type="text"]:focus {
   outline: none;
   box-shadow: 0 0 5px #0f9d58;
 }
+
+/* Scrolling text container under destination */
+.scroll-text-container {
+  overflow: hidden;
+  position: relative;
+  max-width: 100%; /* Prevent overflow beyond the column width */
+}
+
+.scroll-text {
+  display: inline-block;
+  white-space: nowrap; /* Prevent the text from wrapping */
+  animation: scrollText 60s linear infinite; /* Animation for horizontal scrolling */
+  padding-right: 100%; /* Give space for scrolling */
+}
+
+/* Keyframes for scrolling text */
+@keyframes scrollText {
+  from {
+    transform: translateX(100%); /* Start from right side */
+  }
+  to {
+    transform: translateX(-100%); /* End at the left side */
+  }
+}
+

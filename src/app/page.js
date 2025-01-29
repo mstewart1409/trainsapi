@@ -72,7 +72,7 @@ export default function Home() {
 
     return (
         <main className="p-6">
-            <h1 className="text-2xl font-bold mb-4">Train Departures</h1>
+            <h1 className="text-2xl font-bold mb-4">Düsseldorf, Wupperstraße</h1>
             {error && <p className="text-red-500">{error}</p>}
 
             <div className="mb-4">
@@ -122,7 +122,16 @@ export default function Home() {
                             )}
                         </td>
                         <td>{stop.train_no}</td>
-                        <td>{stop.destination}</td>
+                        <td>
+                            {stop.destination}
+                            {stop.infos.length > 0 && (
+                                <div className="scroll-text-container">
+                                    <div className="scroll-text">
+                                        {stop.infos}
+                                    </div>
+                                </div>
+                            )}
+                        </td>
                         <td>{stop.platform}</td>
                         <td className="arriving-in">{stop.arriving_in} min</td>
                     </tr>
