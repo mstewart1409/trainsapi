@@ -27,6 +27,9 @@ p.text-red-500 {
 /* Table styling */
 .led-table {
   width: 100%; /* Table width */
+  table-layout: auto; /* Make sure the columns adjust to available space */
+  overflow-x: auto; /* Allow horizontal scroll if needed */
+  word-wrap: break-word; /* Break words to prevent them from overflowing */
   border-collapse: collapse;
   background-color: #1c1c1c; /* Dark background for the table */
   color: #0f9d58; /* LED Green */
@@ -34,12 +37,45 @@ p.text-red-500 {
   margin: 20px 0;
 }
 
-/* Table header styling */
+.led-table-container {
+  width: 100%;
+  overflow-x: auto; /* Allow horizontal scrolling for the table container */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+  margin: 0 auto; /* Center the table container */
+}
+
+/* Styling for the third column (Richtung) */
+.led-table th:nth-child(3), .led-table td:nth-child(3) {
+  width: 600px; /* Fix the width of the third column */
+  min-width: 600px; /* Ensure the column doesn't shrink smaller than 600px */
+  max-width: 600px; /* Restrict it to 600px */
+}
+
+/* Styling for the rest of the table columns */
 .led-table th, .led-table td {
   padding: 15px;
   text-align: center;
-  border: 2px solid #0f9d58; /* Green border for LED look */
+  border: 2px solid #0f9d58; /* Green border for the LED look */
   font-size: 1.5rem;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Display ellipses for overflowing text */
+}
+
+.led-table th:nth-child(1), .led-table td:nth-child(1) {
+  min-width: 100px; /* Minimum width for the "Zeit" column */
+}
+
+.led-table th:nth-child(2), .led-table td:nth-child(2) {
+  min-width: 150px; /* Minimum width for the "Linie" column */
+}
+
+.led-table th:nth-child(4), .led-table td:nth-child(4) {
+  min-width: 150px; /* Minimum width for the "Gleis" column */
+}
+
+.led-table th:nth-child(5), .led-table td:nth-child(5) {
+  min-width: 150px; /* Minimum width for the "Arriving In" column */
 }
 
 .led-table th {
@@ -125,12 +161,6 @@ select:focus {
   box-shadow: 0 0 5px #0f9d58;
 }
 
-/* Control width of the Richtung column */
-.led-table th:nth-child(3), .led-table td:nth-child(3) {
-  max-width: 400px; /* Ensure the Richtung column doesn't stretch too wide */
-  overflow: hidden;
-  white-space: nowrap;
-}
 
 /* Container for filter controls */
 .mb-4 {
@@ -149,14 +179,6 @@ label {
 /* Styling for the table rows */
 .led-table td {
   padding: 15px;
-}
-
-/* Styling for the "Richtung" column */
-.led-table td:nth-child(3) {
-  max-width: 400px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .led-table td .scroll-text-container {

@@ -144,7 +144,7 @@ export default function Home() {
     };
 
     return (
-        <main className="p-6">
+        <main className="p-6 led-table-container">
             <h1 className="text-2xl font-bold mb-4">Train Departures</h1>
             {error && <p className="text-red-500">{error}</p>}
 
