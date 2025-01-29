@@ -118,8 +118,7 @@ input[type="text"] {
   font-size: 1.2rem;
   font-family: 'Courier New', monospace;
   border-radius: 5px;
-  margin-right: 10px;
-  width: 200px;
+  width: 220px;
 }
 
 input[type="text"]:focus {
@@ -136,8 +135,7 @@ select {
   font-size: 1.2rem;
   font-family: 'Courier New', monospace;
   border-radius: 5px;
-  margin-right: 10px;
-  width: 220px;
+  width: 300px;
 }
 
 select:focus {
@@ -244,3 +242,30 @@ button:disabled {
   background-color: #d32f2f;
 }
 
+/* Container for the time and date */
+.time-container {
+  position: fixed; /* Fix the container to the top-right corner */
+  top: 10px; /* Space from the top */
+  right: 10px; /* Space from the right */
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+  color: #fff; /* White text color */
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+  z-index: 9999; /* Ensure it's on top of other elements */
+  font-family: 'Courier New', monospace; /* Monospace font for that LED feel */
+}
+
+/* Date styling */
+.time-container .date {
+  font-size: 1rem;
+  color: #fff; /* White text */
+  margin-bottom: 5px; /* Space between date and time */
+}
+
+/* Time styling (bigger, bolder) */
+.time-container .time {
+  font-size: 2rem; /* Larger size for time */
+  font-weight: bold; /* Bold font for time */
+  color: #ffdd00; /* LED-style yellow color for time */
+}

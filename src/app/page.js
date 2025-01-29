@@ -10,6 +10,7 @@ const calculateRemainingMinutes = (departureTime) => {
 };
 
 export default function Home() {
+    const [currentTime, setCurrentTime] = useState(new Date());
     const [trainStops, setTrainStops] = useState([]);
     const [filteredTrainStops, setFilteredTrainStops] = useState([]);
     const [error, setError] = useState(null);
@@ -28,6 +29,14 @@ export default function Home() {
     const infoRefs = useRef([]);
 
     const [debouncedFilters, setDebouncedFilters] = useState(filters);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000); // Update time every second
+
+        return () => clearInterval(interval); // Cleanup the interval on component unmount
+    }, []);
 
     useEffect(() => {
         async function fetchData() {
@@ -75,7 +84,20 @@ export default function Home() {
         }, 300); // Wait 300ms before applying filters
 
         return () => clearTimeout(timeout);
-    }, [debouncedFilters]); // Runs only when debouncedFilters change
+    }, [debouncedFilters, trainStops]); // Runs only when debouncedFilters change
+
+    const formattedDate = currentTime.toLocaleDateString("de-DE", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+
+    const formattedTime = currentTime.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    });
 
     // Generic filter function
     const applyFilters = (data, filters) => {
@@ -148,6 +170,11 @@ export default function Home() {
 
     return (
         <main className="p-6 led-table-container">
+            <div className="time-container">
+                <div className="date">{formattedDate}</div>
+                <div className="time">{formattedTime}</div>
+            </div>
+
             <h1 className="text-2xl font-bold mb-4">Train Departures</h1>
             {error && <p className="text-red-500">{error}</p>}
 
