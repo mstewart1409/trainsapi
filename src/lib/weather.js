@@ -1,7 +1,11 @@
 // src/lib/weather.js
+import dotenv from 'dotenv';
 
-const apiKey = '17d8b2d05c2d4d75d37e93f365cbcefb'; // Use your own API key
-const city = "Duesseldorf";
+// Load environment variables from the .env file
+dotenv.config();
+
+const apiKey = process.env.OWM_API_KEY;
+const city = process.env.CITY;
 
 function getUrl(city) {
     return `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
