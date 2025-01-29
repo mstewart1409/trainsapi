@@ -1,83 +1,76 @@
-/* LED Matrix look */
-.led-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #1c1c1c; /* Dark background */
-  color: #0f9d58; /* LED Green */
+/* General page layout */
+body {
+  background-color: #111; /* Dark background for the page */
+  color: #fff; /* Default text color */
   font-family: 'Courier New', monospace; /* Monospace font for that LED feel */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
 }
 
+/* Header styling */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #ffdd00; /* Yellow color for the title */
+}
+
+/* Error message styling */
+p.text-red-500 {
+  color: #f44336; /* Red error message */
+}
+
+/* Table styling */
+.led-table {
+  width: 100%; /* Table width */
+  border-collapse: collapse;
+  background-color: #1c1c1c; /* Dark background for the table */
+  color: #0f9d58; /* LED Green */
+  font-family: 'Courier New', monospace; /* Monospace font */
+  margin: 20px 0;
+}
+
+/* Table header styling */
 .led-table th, .led-table td {
   padding: 15px;
   text-align: center;
-  border: 2px solid #0f9d58; /* Green borders for LED look */
+  border: 2px solid #0f9d58; /* Green border for LED look */
   font-size: 1.5rem;
 }
 
 .led-table th {
-  background-color: #333; /* Darker background for header */
-  color: #0f9d58;
-  font-size: 1.75rem;
+  background-color: #333; /* Dark background for headers */
+  color: #0f9d58; /* LED Green text */
   text-transform: uppercase;
 }
 
 .led-table tr {
-  background-color: #222; /* Dark row backgrounds */
-  transition: background-color 0.3s ease; /* Smooth hover effect */
+  background-color: #222; /* Dark row background */
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
 }
 
 .led-table tr:hover {
   background-color: #444; /* Slight highlight on hover */
 }
 
-/* For the "Zeit" and "Arriving In" fields */
+/* "Zeit" and "Arriving In" fields */
 .led-table td.time, .led-table td.arriving-in {
-  color: #ffdd00; /* Yellow color for time and arriving in fields */
+  color: #ffdd00; /* Yellow color for time and arriving in */
   font-weight: bold;
 }
 
-/* Glowing effect for Zeit and Arriving In */
 .led-table td.time:hover, .led-table td.arriving-in:hover {
   text-shadow: 0 0 10px #ffdd00, 0 0 20px #ffdd00, 0 0 30px #ffdd00, 0 0 40px #ffdd00;
 }
 
-/* Input filter fields */
-input[type="text"], select {
-  background-color: #333;
-  color: #0f9d58;
-  border: 1px solid #0f9d58;
-  padding: 8px;
-  font-size: 1.2rem;
-  font-family: 'Courier New', monospace;
-  border-radius: 5px;
-  margin-right: 10px;
-  cursor: pointer; /* Change cursor to pointer on hover */
-}
-
-input[type="text"]:focus, select:focus {
-  outline: none;
-  box-shadow: 0 0 5px #0f9d58;
-}
-
-/* Style the dropdown options */
-select option {
-  background-color: #222; /* Dark background for options */
-  color: #0f9d58; /* LED Green color */
-  font-family: 'Courier New', monospace;
-  padding: 10px;
-  font-size: 1.2rem;
-}
-
-/* Control width of the Richtung column */
-.led-table th:nth-child(3), .led-table td:nth-child(3) {
-  max-width: 400px; /* Ensure it doesn't stretch too wide */
-  overflow: hidden;
-  white-space: nowrap;
-}
-
+/* Scroll text container */
 .scroll-text-container {
-  width: 100%; /* Ensure it takes full width of the container */
-  overflow: hidden; /* Hide the overflow of the text */
+  width: 100%; /* Ensure it takes full width */
+  overflow: hidden; /* Hide overflow text */
   white-space: nowrap; /* Prevent text from wrapping */
 }
 
@@ -86,12 +79,94 @@ select option {
   animation: scrollText 10s linear infinite; /* Infinite scrolling with linear animation */
 }
 
-/* Define keyframes to move the text from right to left */
+/* Keyframe animation for scrolling text */
 @keyframes scrollText {
   0% {
-    transform: translateX(60%); /* Start from right */
+    transform: translateX(100%); /* Start from right */
   }
   100% {
-    transform: translateX(-60%); /* Move to the left */
+    transform: translateX(-100%); /* End at left */
   }
 }
+
+/* Input filters and controls */
+input[type="text"] {
+  background-color: #333;
+  color: #0f9d58;
+  border: 1px solid #0f9d58;
+  padding: 8px;
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+  border-radius: 5px;
+  margin-right: 10px;
+  width: 200px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 5px #0f9d58; /* Focused input box effect */
+}
+
+/* Dropdown (Select) for location */
+select {
+  background-color: #333;
+  color: #0f9d58;
+  border: 1px solid #0f9d58;
+  padding: 8px;
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+  border-radius: 5px;
+  margin-right: 10px;
+  width: 220px;
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 0 5px #0f9d58;
+}
+
+/* Control width of the Richtung column */
+.led-table th:nth-child(3), .led-table td:nth-child(3) {
+  max-width: 400px; /* Ensure the Richtung column doesn't stretch too wide */
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Container for filter controls */
+.mb-4 {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 1rem;
+  color: #fff;
+  margin-right: 10px;
+}
+
+/* Styling for the table rows */
+.led-table td {
+  padding: 15px;
+}
+
+/* Styling for the "Richtung" column */
+.led-table td:nth-child(3) {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.led-table td .scroll-text-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.led-table td .scroll-text {
+  display: inline-block;
+  animation: scrollText 10s linear infinite;
+}
+

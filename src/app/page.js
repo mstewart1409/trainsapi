@@ -176,7 +176,7 @@ export default function Home() {
                                 )}
                             </td>
                             <td>{stop.platform}</td>
-                            <td className="arriving-in">{stop.arriving_in} min</td>
+                            <td className="arriving-in">{stop.cancelled ? "<p className=\"text-red-500\">{cancelled}</p>" : stop.arriving_in + " min"}</td>
                         </tr>
                     );
                 })}
