@@ -6,6 +6,11 @@ export const options = {
         name: "Düsseldorf, Völklinger Straße S",
         platforms: ["1", "2"],
         includes: "&inclMOT_0=true&inclMOT_1=true&inclMOT_10=true&inclMOT_11=true&inclMOT_12=true&inclMOT_13=true&inclMOT_17=true&inclMOT_18=true&inclMOT_2=true&inclMOT_8=true&inclMOT_9=true"},
+    "BILK": {
+        id: "de%3A05111%3A18249",
+        name: "Düsseldorf, Bilk S",
+        platforms: ["1", "2", "3", "4"],
+        includes: "&inclMOT_0=true&inclMOT_1=true&inclMOT_10=true&inclMOT_11=true&inclMOT_12=true&inclMOT_13=true&inclMOT_17=true&inclMOT_18=true&inclMOT_2=true&inclMOT_8=true&inclMOT_9=true"},
     "WUPPERSTRASSE": {
         id: "de%3A05111%3A18109",
         name: "Düsseldorf, Wupperstraße",
