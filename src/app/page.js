@@ -14,6 +14,9 @@ export default function Home() {
     const [filteredTrainStops, setFilteredTrainStops] = useState([]);
     const [error, setError] = useState(null);
     const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedStop, setSelectedStop] = useState(null);
+
     const [filters, setFilters] = useState({
         gleis: "",  // Filtering by platform (Gleis)
         linie: "",  // Filtering by train number (Linie)
@@ -228,7 +231,10 @@ export default function Home() {
                     const updatedInfos = getUpdatedInfos(index, stop.infos);
 
                     return (
-                        <tr key={index}>
+                        <tr key={index} onClick={() => {
+                            setSelectedStop(stop);
+                            setIsModalOpen(true);
+                        }}>
                             <td className="time">
                                 {new Date(stop.arrival_time).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                                 {stop.delay > 0 && (
@@ -268,6 +274,32 @@ export default function Home() {
             >
                 {filters.limit === 5 ? "Show More" : "Show Less"}
             </button>
+
+            {/* Modal for detailed train information */}
+            {isModalOpen && selectedStop && (
+                <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <h2>Train Information</h2>
+                        <p><strong>Linie:</strong> {selectedStop.train_no}</p>
+                        <p><strong>Richtung:</strong> {selectedStop.destination}</p>
+                        <p><strong>Gleis:</strong> {selectedStop.platform}</p>
+                        <p><strong>Ankunft:</strong> {new Date(selectedStop.arrival_time).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}</p>
+                        <p><strong>Remaining Time:</strong> {selectedStop.remainingTime}</p>
+                        {selectedStop.infos && selectedStop.infos.length > 0 && (
+                            <div>
+                                <strong>Additional Info:</strong>
+                                <ul>
+                                    {selectedStop.infos.map((info, idx) => (
+                                        <li key={idx}>{info}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        <button onClick={() => setIsModalOpen(false)} className="modal-close-btn">Close</button>
+                    </div>
+                </div>
+            )}
+
         </main>
     );
 }

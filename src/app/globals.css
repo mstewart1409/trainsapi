@@ -46,18 +46,13 @@ p.text-red-500 {
   margin: 0 auto; /* Center the table container */
 }
 
-/* Styling for the third column (Richtung) */
-.led-table th, .led-table td {
-  width: 10%; /* Fix the width of the third column */
-}
-
-
 .led-table th:nth-child(3), .led-table td:nth-child(3) {
   width: 50%; /* Fix the width of the third column */
 }
 
 /* Styling for the rest of the table columns */
 .led-table th, .led-table td {
+  width: 10%;
   padding: 15px;
   text-align: center;
   border: 2px solid #0f9d58; /* Green border for the LED look */
@@ -209,5 +204,43 @@ button:disabled {
   border: 2px solid #555;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-height: 80%;
+  overflow-y: auto;
+  color: #000;
+}
+
+.modal-close-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.modal-close-btn:hover {
+  background-color: #d32f2f;
 }
 
