@@ -38,7 +38,6 @@ export default function TrainsPage() {
 
     useEffect(() => {
         async function fetchData() {
-            setLoading(true);
             setError(null);
 
             try {
@@ -248,60 +247,62 @@ export default function TrainsPage() {
                 </div>
             </div>
 
-            {/* Table of train stops */}
-            <table className="led-table">
-                <thead>
-                <tr>
-                    <th>Zeit</th>
-                    <th>Linie</th>
-                    <th>Richtung</th>
-                    <th>Gleis</th>
-                    <th>Ankunft</th>
-                </tr>
-                </thead>
-                <tbody>
-                {filteredTrainStops.map((stop, index) => {
-                    // Initialize ref for infos if it doesn't exist yet
-                    infoRefs.current[index] = infoRefs.current[index] || { infos: stop.infos };
+            <div className={'led-table-container'}>
+                {/* Table of train stops */}
+                <table className="led-table">
+                    <thead>
+                    <tr>
+                        <th>Zeit</th>
+                        <th>Linie</th>
+                        <th>Richtung</th>
+                        <th>Gleis</th>
+                        <th>Ankunft</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {filteredTrainStops.map((stop, index) => {
+                        // Initialize ref for infos if it doesn't exist yet
+                        infoRefs.current[index] = infoRefs.current[index] || { infos: stop.infos };
 
-                    // Get updated infos and compare it with previous to update if needed
-                    const updatedInfos = getUpdatedInfos(index, stop.infos);
+                        // Get updated infos and compare it with previous to update if needed
+                        const updatedInfos = getUpdatedInfos(index, stop.infos);
 
-                    return (
-                        <tr key={index} onClick={() => {
-                            setSelectedStop(stop);
-                            setIsModalOpen(true);
-                        }}>
-                            <td className="time">
-                                {new Date(stop.arrival_time).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
-                                {stop.delay > 0 && (
-                                    <div>+{stop.delay} min</div>
-                                )}
-                            </td>
-                            <td>{stop.train_no}</td>
-                            <td>
-                                {stop.destination}
-                                {updatedInfos && updatedInfos.length > 0 && (
-                                    <div className="scroll-text-container">
-                                        <div className="scroll-text">
-                                            {updatedInfos.join(". ")}
+                        return (
+                            <tr key={index} onClick={() => {
+                                setSelectedStop(stop);
+                                setIsModalOpen(true);
+                            }}>
+                                <td className="time">
+                                    {new Date(stop.arrival_time).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
+                                    {stop.delay > 0 && (
+                                        <div>+{stop.delay} min</div>
+                                    )}
+                                </td>
+                                <td>{stop.train_no}</td>
+                                <td>
+                                    {stop.destination}
+                                    {updatedInfos && updatedInfos.length > 0 && (
+                                        <div className="scroll-text-container">
+                                            <div className="scroll-text">
+                                                {updatedInfos.join(". ")}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </td>
-                            <td>{stop.platform}</td>
-                            <td className="arriving-in">
-                                {stop.cancelled ? (
-                                    <p className="text-red-500">Cancelled</p>
-                                ) : (
-                                    stop.remainingTime
-                                )}
-                            </td>
-                        </tr>
-                    );
-                })}
-                </tbody>
-            </table>
+                                    )}
+                                </td>
+                                <td>{stop.platform}</td>
+                                <td className="arriving-in">
+                                    {stop.cancelled ? (
+                                        <p className="text-red-500">Cancelled</p>
+                                    ) : (
+                                        stop.remainingTime
+                                    )}
+                                </td>
+                            </tr>
+                        );
+                    })}
+                    </tbody>
+                </table>
+            </div>
 
             <div className="mb-4 flex-wrap">
                 {/* Show More / Show Less Button */}

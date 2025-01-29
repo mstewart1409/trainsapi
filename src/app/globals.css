@@ -28,6 +28,7 @@ p.text-red-500 {
 /* Table styling */
 .led-table {
   width: 100%; /* Table width */
+  min-width: 1000px;
   max-width: 100%; /* Restrict it to 100% */
   table-layout: fixed; /* Make sure the columns adjust to available space */
   overflow-x: auto; /* Allow horizontal scroll if needed */
@@ -152,6 +153,10 @@ select:focus {
   gap: 15px;
   margin-bottom: 20px;
   align-items: center;
+}
+
+.mt-4 {
+  margin-top: 20px;
 }
 
 label {
