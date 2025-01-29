@@ -42,9 +42,14 @@ export default function Home() {
     const applyFilters = (data, filters) => {
         let filteredData = data;
 
-        // Apply filter by Gleis
+        // Apply filter by Gleis (only allow platforms defined for the selected location)
         if (filters.gleis) {
-            filteredData = filteredData.filter((stop) => stop.platform === filters.gleis);
+            // Check if the selected gleis exists in the selected location's platforms
+            if (options[filters.location]?.platforms.includes(filters.gleis)) {
+                filteredData = filteredData.filter((stop) => stop.platform === filters.gleis);
+            } else {
+                filteredData = []; // If the gleis doesn't match the available platforms, clear the filtered data
+            }
         }
 
         // Apply filter by Linie
@@ -59,11 +64,12 @@ export default function Home() {
 
         // Apply filter by limit
         if (filters.limit !== 0) {
-            filteredData = filteredData.splice(0, filters.limit);
+            filteredData = filteredData.slice(0, filters.limit); // Use slice instead of splice to not mutate the array
         }
 
         setFilteredTrainStops(filteredData);
     };
+
 
     // Handle changes in filter inputs
     const handleFilterChange = (field, value) => {
@@ -108,13 +114,20 @@ export default function Home() {
 
                 {/* Filter by Gleis */}
                 <label className="mr-2">Filter by Gleis: </label>
-                <input
-                    type="text"
+                <select
                     value={filters.gleis}
                     onChange={(e) => handleFilterChange('gleis', e.target.value)}
                     className="border p-2 mb-2"
-                    placeholder="Enter Gleis (e.g., 1, 2)"
-                />
+                >
+                    {/* Populate the platform options dynamically based on the selected location */}
+                    <option value="">Select Gleis</option>
+                    {options[filters.location]?.platforms.map((platform, index) => (
+                        <option key={index} value={platform}>
+                            {platform}
+                        </option>
+                    ))}
+                </select>
+
 
                 {/* Filter by Linie */}
                 <label className="mr-2 ml-4">Filter by Linie: </label>
@@ -176,7 +189,9 @@ export default function Home() {
                                 )}
                             </td>
                             <td>{stop.platform}</td>
-                            <td className="arriving-in">{stop.cancelled ? "<p className=\"text-red-500\">{cancelled}</p>" : stop.arriving_in + " min"}</td>
+                            <td className="arriving-in">
+                                {stop.cancelled ? <p className="text-red-500">Cancelled</p> : (stop.arriving_in === 0 ? "sofort" : stop.arriving_in + " min")}
+                            </td>
                         </tr>
                     );
                 })}

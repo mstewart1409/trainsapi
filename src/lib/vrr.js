@@ -1,8 +1,16 @@
 // src/lib/vrr.js
 
 export const options = {
-    "VOLKLINGER": {id: "de%3A05111%3A18115", name: "Düsseldorf, Völklinger Straße S", includes: "&inclMOT_0=true&inclMOT_1=true&inclMOT_10=true&inclMOT_11=true&inclMOT_12=true&inclMOT_13=true&inclMOT_17=true&inclMOT_18=true&inclMOT_2=true&inclMOT_8=true&inclMOT_9=true"},
-    "WUPPERSTRASSE": {id: "de%3A05111%3A18109", name: "Düsseldorf, Wupperstraße", includes: "&inclMOT_0=true&inclMOT_1=true&inclMOT_10=true&inclMOT_11=true&inclMOT_12=true&inclMOT_13=true&inclMOT_17=true&inclMOT_18=true&inclMOT_19=true&inclMOT_2=true&inclMOT_3=true&inclMOT_4=true&inclMOT_5=true&inclMOT_6=true&inclMOT_7=true&inclMOT_8=true&inclMOT_9=true"},
+    "VOLKLINGER": {
+        id: "de%3A05111%3A18115",
+        name: "Düsseldorf, Völklinger Straße S",
+        platforms: ["1", "2"],
+        includes: "&inclMOT_0=true&inclMOT_1=true&inclMOT_10=true&inclMOT_11=true&inclMOT_12=true&inclMOT_13=true&inclMOT_17=true&inclMOT_18=true&inclMOT_2=true&inclMOT_8=true&inclMOT_9=true"},
+    "WUPPERSTRASSE": {
+        id: "de%3A05111%3A18109",
+        name: "Düsseldorf, Wupperstraße",
+        platforms: ["1", "2"],
+        includes: "&inclMOT_0=true&inclMOT_1=true&inclMOT_10=true&inclMOT_11=true&inclMOT_12=true&inclMOT_13=true&inclMOT_17=true&inclMOT_18=true&inclMOT_19=true&inclMOT_2=true&inclMOT_3=true&inclMOT_4=true&inclMOT_5=true&inclMOT_6=true&inclMOT_7=true&inclMOT_8=true&inclMOT_9=true"},
 }
 
 function getUrl(key) {
