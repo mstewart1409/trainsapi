@@ -7,13 +7,6 @@
   font-family: 'Courier New', monospace; /* Monospace font for that LED feel */
 }
 
-/* Control width of the Richtung column */
-.led-table th:nth-child(3), .led-table td:nth-child(3) {
-  max-width: 300px; /* Ensure it doesn't stretch too wide */
-  overflow: hidden;
-  white-space: nowrap;
-}
-
 .led-table th, .led-table td {
   padding: 15px;
   text-align: center;
@@ -49,7 +42,7 @@
 }
 
 /* Input filter fields */
-input[type="text"] {
+input[type="text"], select {
   background-color: #333;
   color: #0f9d58;
   border: 1px solid #0f9d58;
@@ -58,34 +51,47 @@ input[type="text"] {
   font-family: 'Courier New', monospace;
   border-radius: 5px;
   margin-right: 10px;
+  cursor: pointer; /* Change cursor to pointer on hover */
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus, select:focus {
   outline: none;
   box-shadow: 0 0 5px #0f9d58;
 }
 
-/* Scrolling text container under destination */
-.scroll-text-container {
+/* Style the dropdown options */
+select option {
+  background-color: #222; /* Dark background for options */
+  color: #0f9d58; /* LED Green color */
+  font-family: 'Courier New', monospace;
+  padding: 10px;
+  font-size: 1.2rem;
+}
+
+/* Control width of the Richtung column */
+.led-table th:nth-child(3), .led-table td:nth-child(3) {
+  max-width: 400px; /* Ensure it doesn't stretch too wide */
   overflow: hidden;
-  position: relative;
-  max-width: 100%; /* Prevent overflow beyond the column width */
+  white-space: nowrap;
+}
+
+.scroll-text-container {
+  width: 100%; /* Ensure it takes full width of the container */
+  overflow: hidden; /* Hide the overflow of the text */
+  white-space: nowrap; /* Prevent text from wrapping */
 }
 
 .scroll-text {
   display: inline-block;
-  white-space: nowrap; /* Prevent the text from wrapping */
-  animation: scrollText 60s linear infinite; /* Animation for horizontal scrolling */
-  padding-right: 100%; /* Give space for scrolling */
+  animation: scrollText 10s linear infinite; /* Infinite scrolling with linear animation */
 }
 
-/* Keyframes for scrolling text */
+/* Define keyframes to move the text from right to left */
 @keyframes scrollText {
-  from {
-    transform: translateX(100%); /* Start from right side */
+  0% {
+    transform: translateX(60%); /* Start from right */
   }
-  to {
-    transform: translateX(-100%); /* End at the left side */
+  100% {
+    transform: translateX(-60%); /* Move to the left */
   }
 }
-

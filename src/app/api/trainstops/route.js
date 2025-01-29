@@ -1,9 +1,12 @@
 // src/app/api/trainstops/route.js
 import { vrr } from '@/lib/vrr';
 
-export async function GET() {
+export async function GET(request) {
+    const { searchParams } = new URL(request.url);
+    const key = searchParams.get('key');
+
     try {
-        const result = await vrr();
+        const result = await vrr(key);
 
         if (result.error) {
             return Response.json({ error: result.error }, { status: 500 });
