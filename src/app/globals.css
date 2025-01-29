@@ -1,0 +1,59 @@
+/* LED Matrix look */
+.led-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1c1c1c; /* Dark background */
+  color: #0f9d58; /* LED Green */
+  font-family: 'Courier New', monospace; /* Monospace font for that LED feel */
+}
+
+.led-table th, .led-table td {
+  padding: 15px;
+  text-align: center;
+  border: 2px solid #0f9d58; /* Green borders for LED look */
+  font-size: 1.5rem;
+}
+
+.led-table th {
+  background-color: #333; /* Darker background for header */
+  color: #0f9d58;
+  font-size: 1.75rem;
+  text-transform: uppercase;
+}
+
+.led-table tr {
+  background-color: #222; /* Dark row backgrounds */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.led-table tr:hover {
+  background-color: #444; /* Slight highlight on hover */
+}
+
+/* For the "Zeit" and "Arriving In" fields */
+.led-table td.time, .led-table td.arriving-in {
+  color: #ffdd00; /* Yellow color for time and arriving in fields */
+  font-weight: bold;
+}
+
+/* Glowing effect for Zeit and Arriving In */
+.led-table td.time:hover, .led-table td.arriving-in:hover {
+  text-shadow: 0 0 10px #ffdd00, 0 0 20px #ffdd00, 0 0 30px #ffdd00, 0 0 40px #ffdd00;
+}
+
+/* Input filter fields */
+input[type="text"] {
+  background-color: #333;
+  color: #0f9d58;
+  border: 1px solid #0f9d58;
+  padding: 8px;
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 5px #0f9d58;
+}
