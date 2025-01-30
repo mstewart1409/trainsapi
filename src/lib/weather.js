@@ -24,4 +24,4 @@ async function fetchWeatherBase(lat, long) {
     }
 }
 
-export const fetchWeather = retryDecorator(fetchWeatherBase, 3, 0);
+export const fetchWeather = retryDecorator(fetchWeatherBase, 3, 1000);

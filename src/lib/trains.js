@@ -56,4 +56,4 @@ export async function getTrainStopsBase(key) {
     }
 }
 
-export const getTrainStops = retryDecorator(getTrainStopsBase, 3, 0);
+export const getTrainStops = retryDecorator(getTrainStopsBase, 3, 1000);
