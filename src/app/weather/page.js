@@ -19,6 +19,7 @@ const WeatherPage = () => {
                 try {
                     const response = await fetch(`/api/weather?lat=${position.latitude}&long=${position.longitude}`);
                     const data = await response.json();
+                    console.log(data);
                     setWeather(data);
                 } catch (err) {
                     setError("Error fetching weather data.");
@@ -35,10 +36,9 @@ const WeatherPage = () => {
         }
     }, [position]); // Re-run whenever position changes
 
-    const roundedTemperature = weather ? Math.round(weather.main.temp) : null;
+    const roundedTemperature = weather ? Math.round(weather.main?.temp || null) : null;
 
     const { formattedDate, formattedTime } = useClock(false);
-
     return (
         <div>
             {/* Clock Display */}
@@ -50,7 +50,7 @@ const WeatherPage = () => {
             {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
-            {weather && (
+            {weather && roundedTemperature (
                 <div style={{ textAlign: "center", marginBottom: "40px" }}>
                     {/* Weather Icon */}
                     <div style={{ textAlign: "center", marginBottom: "20px" }}>
