@@ -7,14 +7,9 @@ const fetchDataFromAPI = async (lat, long) => {
     try {
         const cache = await getCache();
         const response = await fetchWeather(lat, long)
-
-        if(response.error) {
-            console.error('Error fetching weather data:', response.error);
-            throw new Error(response.error);
-        }
         console.log('Fetched new data from OpenWeatherMap');
         // Save the data to the cache
-        cache.set('weather_' + lat + '_' + long, response.result);
+        cache.set('weather_' + lat + '_' + long, response);
         await addWeatherKey(lat + '_' + long);
     } catch (error) {
         console.error('Error fetching weather data:', error);
@@ -60,9 +55,11 @@ const fetchDataFromAPIMultiple = async () => {
 
 // Start a background worker that fetches data from the API every 2 minutes
 const startBackgroundWorker = () => {
-    // Fetch data right away
-    //fetchDataFromAPI();
-    setInterval(fetchDataFromAPIMultiple, 2 * 60 * 1000); // Every 2 minutes
+    setInterval(() => {
+        fetchDataFromAPIMultiple().catch(error => {
+            console.error('Error fetching weather data for multiple keys:', error);
+        });
+    }, 2 * 60 * 1000); // Every 2 minutes
 };
 
 // Call the function to start the worker

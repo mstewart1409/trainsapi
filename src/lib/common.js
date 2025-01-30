@@ -16,3 +16,17 @@ export function retryDecorator(fn, retries = 3, delay = 1000) {
         }
     };
 }
+
+export async function baseHandler(url) {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    if (!data) {
+        throw Error("Invalid API response format");
+    }
+    return data;
+}

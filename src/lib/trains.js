@@ -1,9 +1,6 @@
 // src/lib/vrr.js
-import { retryDecorator } from './common';
+import { retryDecorator, baseHandler } from './common';
 
-
-const controller = new AbortController();
-const timeoutId = setTimeout(() => controller.abort(), 10000);
 
 export const options = {
     "VOLKLINGER": {
@@ -33,22 +30,11 @@ function getUrl(key) {
     return `https://www.vrr.de/vrr-efa/XML_DM_REQUEST?calcOneDirection=1&coordOutputFormat=WGS84%5Bdd.ddddd%5D&deleteAssignedStops_dm=1&depSequence=30&depType=stopEvents&doNotSearchForStops=1&genMaps=0&imparedOptionsActive=1${includes}&includeCompleteStopSeq=1&includedMeans=checkbox&itOptionsActive=1&itdDateTimeDepArr=dep&language=de&locationServerActive=1&maxTimeLoop=1&mode=direct&name_dm=${locationId}&outputFormat=rapidJSON&ptOptionsActive=1&serverInfo=1&sl3plusDMMacro=1&type_dm=any&useAllStops=1&useElevationData=1&useProxFootSearch=0&useRealtime=1&version=10.5.17.3&vrrDMMacro=1`;
 }
 
-export async function getTrainStops(key) {
+export async function getTrainStopsBase(key) {
     try {
-        const url = getUrl(key);
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(timeoutId);
+        const data = await baseHandler(getUrl(key));
 
-        if (!response.ok) {
-            return { error: `HTTP error! Status: ${response.status}` };
-        }
-        const data = await response.json();
-
-        if (!data?.stopEvents || !Array.isArray(data.stopEvents)) {
-            return { error: "Invalid API response format" };
-        }
-
-        const stops = data.stopEvents.map((stop) => ({
+        return data.stopEvents.map((stop) => ({
             arrival_time: stop?.departureTimePlanned,
             cancelled: stop?.isCancelled || false,
             estimated_time: stop?.departureTimeEstimated || stop?.departureTimePlanned,
@@ -60,15 +46,14 @@ export async function getTrainStops(key) {
             destination: stop?.transportation?.destination?.name || "Unknown",
             infos: stop?.infos?.map((info) => info.infoLinks[0]?.subtitle) || [],
         }));
-        return {result: stops};
 
     } catch (error) {
         console.error("Error fetching VRR data:", {
             message: error.message,
             stack: error.stack,
         });
-        return { error: "Failed to fetch train stops" };
+        throw Error("Failed to fetch trains data");
     }
 }
 
-export const fetchWeather = retryDecorator(getTrainStops, 3, 0);
+export const getTrainStops = retryDecorator(getTrainStopsBase, 3, 0);
