@@ -7,12 +7,18 @@ const fetchDataFromAPI = async (lat, long) => {
     try {
         const cache = await getCache();
         const response = await fetchWeather(lat, long)
+
+        if(response.error) {
+            console.error('Error fetching weather data:', response.error);
+            throw new Error(response.error);
+        }
         console.log('Fetched new data from OpenWeatherMap');
         // Save the data to the cache
-        cache.set('weather_' + lat + '_' + long, response);
+        cache.set('weather_' + lat + '_' + long, response.result);
         await addWeatherKey(lat + '_' + long);
     } catch (error) {
         console.error('Error fetching weather data:', error);
+        throw error;
     }
 };
 
@@ -32,6 +38,7 @@ const addWeatherKey = async (key) => {
         }
     } catch (error) {
         console.error('Error adding new weather key:', error);
+        throw error;
     }
 };
 
@@ -47,6 +54,7 @@ const fetchDataFromAPIMultiple = async () => {
         }
     } catch (error) {
         console.error('Error fetching weather data for multiple keys:', error);
+        throw error;
     }
 };
 

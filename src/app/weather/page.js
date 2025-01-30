@@ -13,7 +13,6 @@ const WeatherPage = () => {
     useEffect(() => {
         if (position !== null) {  // Check if position is available
             const getWeather = async () => {
-                setLoading(true);
                 setError(null);
 
                 try {

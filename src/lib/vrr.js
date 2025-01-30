@@ -1,5 +1,8 @@
 // src/lib/vrr.js
 
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 10000);
+
 export const options = {
     "VOLKLINGER": {
         id: "de%3A05111%3A18115",
@@ -31,7 +34,9 @@ function getUrl(key) {
 export async function vrr(key) {
     try {
         const url = getUrl(key);
-        const response = await fetch(url);
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
         if (!response.ok) {
             return { error: `HTTP error! Status: ${response.status}` };
         }
@@ -41,7 +46,7 @@ export async function vrr(key) {
             return { error: "Invalid API response format" };
         }
 
-        const trainStops = data.stopEvents.map((stop) => ({
+        const stops = data.stopEvents.map((stop) => ({
             arrival_time: stop?.departureTimePlanned,
             cancelled: stop?.isCancelled || false,
             estimated_time: stop?.departureTimeEstimated || stop?.departureTimePlanned,
@@ -53,8 +58,8 @@ export async function vrr(key) {
             destination: stop?.transportation?.destination?.name || "Unknown",
             infos: stop?.infos?.map((info) => info.infoLinks[0]?.subtitle) || [],
         }));
+        return {result: stops};
 
-        return trainStops;
     } catch (error) {
         console.error("Error fetching VRR data:", {
             message: error.message,

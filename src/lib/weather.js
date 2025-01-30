@@ -5,6 +5,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const apiKey = process.env.OWM_API_KEY;
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 10000);
+
 
 function getUrl(lat, lon) {
     return `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
@@ -12,7 +15,8 @@ function getUrl(lat, lon) {
 
 export async function fetchWeather(lat, lon) {
     try {
-        const response = await fetch(getUrl(lat, lon));
+        const response = await fetch(getUrl(lat, lon), { signal: controller.signal });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
             return { error: `HTTP error! Status: ${response.status}` };
@@ -22,7 +26,7 @@ export async function fetchWeather(lat, lon) {
         if (!data) {
             return { error: "Invalid API response format" };
         }
-        return data;
+        return {result: data};
     } catch (error) {
         console.error("Error fetching Weather data:", {
             message: error.message,

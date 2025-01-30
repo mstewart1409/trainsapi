@@ -8,11 +8,17 @@ const fetchDataFromAPI = async (key) => {
     try {
         const cache = await getCache();
         const response = await vrr(key);
+
+        if(response.error) {
+            console.error('Error fetching VRR data:', response.error);
+            throw new Error(response.error);
+        }
         console.log('Fetched new data from VRR for key:', key);
         // Save the data to the cache
-        cache.set('vrr_' + key, response);
+        cache.set('vrr_' + key, response.result);
     } catch (error) {
         console.error('Error fetching VRR data', error);
+        throw error;
     }
 };
 
