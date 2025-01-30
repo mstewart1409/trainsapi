@@ -50,7 +50,7 @@ const WeatherPage = () => {
             {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
-            {weather && roundedTemperature (
+            {weather && roundedTemperature !== null && (
                 <div style={{ textAlign: "center", marginBottom: "40px" }}>
                     {/* Weather Icon */}
                     <div style={{ textAlign: "center", marginBottom: "20px" }}>
