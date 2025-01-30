@@ -18,7 +18,6 @@ const WeatherPage = () => {
                 try {
                     const response = await fetch(`/api/weather?lat=${position.latitude}&long=${position.longitude}`);
                     const data = await response.json();
-                    console.log(data);
                     setWeather(data);
                 } catch (err) {
                     setError("Error fetching weather data.");

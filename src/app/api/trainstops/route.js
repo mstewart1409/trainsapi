@@ -1,5 +1,5 @@
 // src/app/api/trainstops/route.js
-import { vrr, options } from '@/lib/vrr';
+import { getTrainStops, options } from '@/lib/trains';
 import { getCache } from "@/lib/cache";
 
 
@@ -7,7 +7,7 @@ import { getCache } from "@/lib/cache";
 const fetchDataFromAPI = async (key) => {
     try {
         const cache = await getCache();
-        const response = await vrr(key);
+        const response = await getTrainStops(key);
 
         if(response.error) {
             console.error('Error fetching VRR data:', response.error);

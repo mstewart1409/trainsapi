@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { options } from '@/lib/vrr';
+import { options } from '@/lib/trains';
 import useClock from '@/components/ClockComponent';
 import Link from "next/link";
 
@@ -17,7 +17,6 @@ export default function TrainsPage() {
     const [trainStops, setTrainStops] = useState([]);
     const [filteredTrainStops, setFilteredTrainStops] = useState([]);
     const [error, setError] = useState(null);
-    const [buttonDisabled, setButtonDisabled] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStop, setSelectedStop] = useState(null);
     const router = useRouter();
@@ -308,8 +307,7 @@ export default function TrainsPage() {
                 {/* Show More / Show Less Button */}
                 <button
                     onClick={(e) => handleFilterChange('limit', filters.limit === 5 ? 10 : 5)}
-                    disabled={buttonDisabled}
-                    className={`mt-4 px-4 py-2 rounded ${buttonDisabled ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 text-white"}`}
+                    className={"mt-4 px-4 py-2 rounded bg-blue-500 text-white"}
                 >
                     {filters.limit === 5 ? "Show More" : "Show Less"}
                 </button>
@@ -326,8 +324,14 @@ export default function TrainsPage() {
                         <p><strong>Linie:</strong> {selectedStop.train_no}</p>
                         <p><strong>Richtung:</strong> {selectedStop.destination}</p>
                         <p><strong>Gleis:</strong> {selectedStop.platform}</p>
-                        <p><strong>Ankunft:</strong> {new Date(selectedStop.arrival_time).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}</p>
-                        <p><strong>Remaining Time:</strong> {selectedStop.remainingTime}</p>
+                        <p><strong>Zeit:</strong> {new Date(selectedStop.arrival_time).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })} {selectedStop.delay > 0 && (
+                            <div>+{selectedStop.delay} min</div>
+                        )}</p>
+                        <p><strong>Ankunft:</strong> {selectedStop.cancelled ? (
+                            <p className="text-red-500">Cancelled</p>
+                        ) : (
+                            selectedStop.remainingTime
+                        )}</p>
                         {selectedStop.infos && selectedStop.infos.length > 0 && (
                             <div>
                                 <strong>Additional Info:</strong>

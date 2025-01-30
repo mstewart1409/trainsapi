@@ -1,4 +1,6 @@
 // src/lib/vrr.js
+import { retryDecorator } from './common';
+
 
 const controller = new AbortController();
 const timeoutId = setTimeout(() => controller.abort(), 10000);
@@ -31,7 +33,7 @@ function getUrl(key) {
     return `https://www.vrr.de/vrr-efa/XML_DM_REQUEST?calcOneDirection=1&coordOutputFormat=WGS84%5Bdd.ddddd%5D&deleteAssignedStops_dm=1&depSequence=30&depType=stopEvents&doNotSearchForStops=1&genMaps=0&imparedOptionsActive=1${includes}&includeCompleteStopSeq=1&includedMeans=checkbox&itOptionsActive=1&itdDateTimeDepArr=dep&language=de&locationServerActive=1&maxTimeLoop=1&mode=direct&name_dm=${locationId}&outputFormat=rapidJSON&ptOptionsActive=1&serverInfo=1&sl3plusDMMacro=1&type_dm=any&useAllStops=1&useElevationData=1&useProxFootSearch=0&useRealtime=1&version=10.5.17.3&vrrDMMacro=1`;
 }
 
-export async function vrr(key) {
+export async function getTrainStops(key) {
     try {
         const url = getUrl(key);
         const response = await fetch(url, { signal: controller.signal });
@@ -68,3 +70,5 @@ export async function vrr(key) {
         return { error: "Failed to fetch train stops" };
     }
 }
+
+export const fetchWeather = retryDecorator(getTrainStops, 3, 0);
