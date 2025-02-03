@@ -1,0 +1,12 @@
+# /home/pi/ngrok.yml
+
+version: 2
+authtoken: XXXXX # Replace with your actual ngrok auth to>
+
+tunnels:
+  nginx:
+    addr: 80
+    proto: http
+    hostname: app.app
+
+

@@ -1,0 +1,18 @@
+// /etc/systemd/system/ngrok.service
+
+[Unit]
+Description=ngrok with Google OAuth
+After=network.target
+
+[Service]
+ExecStart=/home/pi/start_ngrok.sh
+Restart=always
+User=pi
+WorkingDirectory=/home/pi
+Environment=HOME=/home/pi
+Environment=PATH=/usr/bin:/usr/local/bin
+StandardOutput=journal
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target
