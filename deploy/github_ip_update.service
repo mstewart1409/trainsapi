@@ -1,0 +1,6 @@
+[Unit]
+Description=Update GitHub Webhook IPs
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/update_github_ips.sh

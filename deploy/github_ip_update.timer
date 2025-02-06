@@ -1,0 +1,10 @@
+[Unit]
+Description=Update GitHub Webhook IPs
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=6h
+Unit=github_ip_update.service
+
+[Install]
+WantedBy=timers.target
