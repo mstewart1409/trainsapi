@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="/api/manifest" />
         <meta name="theme-color" content="#000000" />
         <meta name="description" content="My Progressive Web App built with Next.js" />
       </head>
